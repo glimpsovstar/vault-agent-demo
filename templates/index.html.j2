@@ -1,0 +1,12 @@
+<!-- templates/index.html.j2 -->
+<html>
+  <body>
+    <h1>Vault Agent Rendered Page</h1>
+
+    {{ "{{ with secret \\\"vault-agent-secret/data/file_variable\\\" }}" }}
+    <p><b>file_variable (from file secret):</b> {{ "{{ .Data.data.variable }}" }}</p>
+    {{ "{{ end }}" }}
+
+    <p><b>env_variable (from env):</b> {{ "{{ env \\\"MY_SECRET_VAR\\\" }}" }}</p>
+  </body>
+</html>

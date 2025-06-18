@@ -1,12 +1,20 @@
 ---
-- name: Install Vault (Debian)
-  apt:
-    name: vault
+- name: Add HashiCorp Yum GPG key
+  ansible.builtin.rpm_key:
+    key: https://rpm.releases.hashicorp.com/gpg
     state: present
-  when: ansible_os_family == "Debian"
 
+- name: Add HashiCorp Yum repository
+  ansible.builtin.yum_repository:
+    name: hashicorp
+    description: "HashiCorp Stable - {{ ansible_distribution }}"
+    baseurl: "https://rpm.releases.hashicorp.com/RHEL/{{ ansible_distribution_major_version }}/$basearch/stable"
+    gpgcheck: yes
+    gpgkey: https://rpm.releases.hashicorp.com/gpg
+    enabled: yes
+    
 - name: Install Vault (RHEL)
-  yum:
+  ansible.builtin.yum:
     name: vault
     state: present
   when: ansible_os_family == "RedHat"

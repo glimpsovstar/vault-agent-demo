@@ -1,6 +1,6 @@
 ---
 - name: Install and Configure Vault Agent
-  hosts: vault_clients
+  hosts: all
   become: true
   vars_files:
     - vars/main.yml
@@ -9,6 +9,14 @@
     - include_tasks: tasks/install.yml
     - include_tasks: tasks/configure.yml
     - include_tasks: tasks/service.yml
+    - include_tasks: tasks/httpd.yml
 
   handlers:
-    - include: handlers/main.yml
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Restart Vault Agent
+      systemd:
+        name: vault-agent
+        state: restarted
