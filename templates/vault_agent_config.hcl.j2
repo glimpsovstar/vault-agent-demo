@@ -1,4 +1,4 @@
-# Vault Agent Config
+# templates/vault_agent_config.hcl.j2
 pid_file = "/var/run/vault-agent.pid"
 
 vault {
@@ -9,12 +9,5 @@ vault {
 template {
   destination = "{{ output_file }}"
   command     = "systemctl restart httpd"
-  contents = <<EOH
-{{ "{{ with secret \"" }}{{ secret_path }}{{ "\" }}" }}
-<html><body>
-<p>Password: {{ "{{ .Data.data.password }}" }}</p>
-<p>ENV VAR: {{ "{{ env \"MY_SECRET_VAR\" }}" }}</p>
-</body></html>
-{{ "{{ end }}" }}
-EOH
+  source      = "/etc/vault/index.html.j2"
 }

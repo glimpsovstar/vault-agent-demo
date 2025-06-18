@@ -1,0 +1,10 @@
+<!-- templates/index.html.j2 -->
+<html>
+  <body>
+    <h1>Vault Injected Secrets</h1>
+    {{ "{{ with secret \\"" }}{{ secret_path }}{{ "\\" }}" }}
+    <p>Password: {{ "{{ .Data.data.password }}" }}</p>
+    <p>ENV VAR: {{ "{{ env \\"MY_SECRET_VAR\\" }}" }}</p>
+    {{ "{{ end }}" }}
+  </body>
+</html>
