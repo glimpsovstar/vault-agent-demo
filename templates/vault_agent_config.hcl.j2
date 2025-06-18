@@ -3,6 +3,7 @@ pid_file = "/var/run/vault-agent.pid"
 vault {
   address = "{{ vault_address }}"
   token = "{{ vault_token }}"
+  namespace = "{{ vault_namespace }}"
 }
 
 auto_auth {

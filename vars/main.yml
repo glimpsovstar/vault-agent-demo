@@ -1,5 +1,5 @@
 ---
 vault_address: "https://djoo-test-vault-public-vault-a40e8748.a3bc1cae.z1.hashicorp.cloud:8200"
 vault_token: "root-token-here"
-secret_path: "kv/data/webapp"
 output_file: "/var/www/html/index.html"
+vault_namespace: "admin"
