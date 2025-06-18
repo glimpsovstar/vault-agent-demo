@@ -12,4 +12,10 @@
     - include_tasks: tasks/httpd.yml
 
   handlers:
-    - include: handlers/main.yml
+    - name: Reload systemd
+      command: systemctl daemon-reexec
+
+    - name: Restart Vault Agent
+      systemd:
+        name: vault-agent
+        state: restarted

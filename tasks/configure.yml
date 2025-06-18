@@ -1,12 +1,12 @@
 ---
 - name: Create Vault config dir
-  file:
+  ansible.builtin.file:
     path: /etc/vault
     state: directory
     mode: '0755'
 
 - name: Create Vault Agent config file
-  template:
+  ansible.builtin.template:
     src: vault_agent_config.hcl.j2
     dest: /etc/vault/config.hcl
     mode: '0644'

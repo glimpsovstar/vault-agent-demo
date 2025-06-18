@@ -1,29 +1,29 @@
 # tasks/httpd.yml
 ---
 - name: Install httpd
-  dnf:
+  ansible.builtin.dnf:
     name: httpd
-    state: latest
+    state: present
 
 - name: Install firewalld
-  dnf:
+  ansible.builtin.dnf:
     name: firewalld
-    state: latest
+    state: present
 
 - name: Copying index.html to right place (template will be rendered by Vault Agent)
-  file:
+  ansible.builtin.file:
     path: /var/www/html/index.html
     state: touch
     mode: '0755'
 
 - name: Enable and start httpd
-  service:
+  ansible.builtin.service:
     name: httpd
     enabled: true
     state: started
 
 - name: Enable and start firewalld
-  service:
+  ansible.builtin.service:
     name: firewalld
     enabled: true
     state: started
@@ -40,4 +40,4 @@
     service: https
     state: enabled
     immediate: true
-    permanent: true
+    permanent: true 
