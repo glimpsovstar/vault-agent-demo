@@ -19,12 +19,16 @@ auto_auth {
     }
   }
 
-  # Inject MY_SECRET_VAR from env_variable secret into env
+  # Inject MY_SECRET_VAR from env_variable secret into environment
   sink "env" {
     config = {
       env_var_name = "MY_SECRET_VAR"
-      secret = "vault-agent-secret/data/env_variable"
-      template = "{{ with secret \\"vault-agent-secret/data/env_variable\\" }}{{ .Data.data.env_var }}{{ end }}"
+      secret       = "vault-agent-secret/data/env_variable"
+      template     = <<EOH
+{% raw %}
+{{ with secret "vault-agent-secret/data/env_variable" }}{{ .Data.data.env_var }}{{ end }}
+{% endraw %}
+EOH
     }
   }
 }
@@ -33,11 +37,13 @@ auto_auth {
 template {
   destination = "/etc/httpd/djoo.cfg"
   command     = "systemctl restart httpd"
-  wait_time = "5s"
-  contents = <<EOH
+  wait_time   = "5s"
+  contents    = <<EOH
+{% raw %}
 {{ with secret "vault-agent-secret/data/file_variable" }}
 file_variable = {{ .Data.data.value }}
 {{ end }}
+{% endraw %}
 EOH
 }
 
@@ -46,5 +52,5 @@ template {
   destination = "{{ output_file }}"
   command     = "systemctl restart httpd"
   source      = "/etc/vault/index.html.j2"
-  wait_time = "5s"
+  wait_time   = "5s"
 }
