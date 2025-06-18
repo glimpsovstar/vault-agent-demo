@@ -1,4 +1,3 @@
-# templates/vault_agent_config.hcl.j2
 pid_file = "/var/run/vault-agent.pid"
 
 vault {
@@ -6,8 +5,45 @@ vault {
   token = "{{ vault_token }}"
 }
 
+auto_auth {
+  method "token_file" {
+    config = {
+      token_file_path = "/etc/vault/.vault-token"
+    }
+  }
+
+  sink "file" {
+    config = {
+      path = "/etc/vault/.vault-token"
+    }
+  }
+
+  # Inject MY_SECRET_VAR from env_variable secret into env
+  sink "env" {
+    config = {
+      env_var_name = "MY_SECRET_VAR"
+      secret = "vault-agent-secret/data/env_variable"
+      template = "{{ with secret \\"vault-agent-secret/data/env_variable\\" }}{{ .Data.data.env_var }}{{ end }}"
+    }
+  }
+}
+
+# Render djoo.cfg with file_variable secret
+template {
+  destination = "/etc/httpd/djoo.cfg"
+  command     = "systemctl restart httpd"
+  wait_time = "5s"
+  contents = <<EOH
+{{ with secret "vault-agent-secret/data/file_variable" }}
+file_variable = {{ .Data.data.value }}
+{{ end }}
+EOH
+}
+
+# Render index.html using the env var MY_SECRET_VAR
 template {
   destination = "{{ output_file }}"
   command     = "systemctl restart httpd"
   source      = "/etc/vault/index.html.j2"
+  wait_time = "5s"
 }
