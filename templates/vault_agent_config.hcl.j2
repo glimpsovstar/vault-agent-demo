@@ -25,9 +25,9 @@ auto_auth {
       env_var_name = "MY_SECRET_VAR"
       secret       = "vault-agent-secret/data/env_variable"
       template     = <<EOH
-{% raw %}
-{{ with secret "vault-agent-secret/data/env_variable" }}{{ .Data.data.env_var }}{{ end }}
-{% endraw %}
+{{ '{% raw %}' }}
+{{ '{{ with secret "vault-agent-secret/data/env_variable" }}{{ .Data.data.env_var }}{{ end }}' }}
+{{ '{% endraw %}' }}
 EOH
     }
   }
@@ -39,11 +39,11 @@ template {
   command     = "systemctl restart httpd"
   wait_time   = "5s"
   contents    = <<EOH
-{% raw %}
-{{ with secret "vault-agent-secret/data/file_variable" }}
-file_variable = {{ .Data.data.value }}
-{{ end }}
-{% endraw %}
+{{ '{% raw %}' }}
+{{ '{{ with secret "vault-agent-secret/data/file_variable" }}' }}
+file_variable = {{ '{{ .Data.data.value }}' }}
+{{ '{{ end }}' }}
+{{ '{% endraw %}' }}
 EOH
 }
 
