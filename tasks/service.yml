@@ -1,0 +1,24 @@
+---
+- name: Create systemd unit file for Vault Agent
+  copy:
+    dest: /etc/systemd/system/vault-agent.service
+    content: |
+      [Unit]
+      Description=Vault Agent
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/vault agent -config=/etc/vault/config.hcl
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+  notify:
+    - Reload systemd
+    - Restart Vault Agent
+
+- name: Enable and start Vault Agent service
+  systemd:
+    name: vault-agent
+    enabled: yes
+    state: started

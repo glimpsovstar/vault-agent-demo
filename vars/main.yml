@@ -1,0 +1,5 @@
+---
+vault_address: "https://your-vault-url:8200"
+vault_token: "root-token-here"
+secret_path: "kv/data/webapp"
+output_file: "/var/www/html/index.html"
